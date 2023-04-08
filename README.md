@@ -2,14 +2,23 @@
 
 title	author	date	output
 Course Project 1 - Reproducible Research
-Shengyu Chen
-March 20, 2016
+Aryaman Dev
+April 8, 2023
 html_document
-##Assignment Instructions 1.Code for reading in the dataset and/or processing the data 2.Histogram of the total number of steps taken each day 3.Mean and median number of steps taken each day 4.Time series plot of the average number of steps taken 5.The 5-minute interval that, on average, contains the maximum number of steps 6.Code to describe and show a strategy for imputing missing data 7.Histogram of the total number of steps taken each day after missing values are imputed 8.Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends 9.All of the R code needed to reproduce the results (numbers, plots, etc.) in the report
+##Assignment Instructions 
+1.Code for reading in the dataset and/or processing the data 
+2.Histogram of the total number of steps taken each day 
+3.Mean and median number of steps taken each day 
+4.Time series plot of the average number of steps taken 
+5.The 5-minute interval that, on average, contains the maximum number of steps 
+6.Code to describe and show a strategy for imputing missing data 
+7.Histogram of the total number of steps taken each day after missing values are imputed 
+8.Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends 
+9.All of the R code needed to reproduce the results (numbers, plots, etc.) in the report
 
 ##Step 1 ##Code for reading in the dataset and/or processing the data
 
-setwd("C:/Users/Shengyu Chen/Dropbox/Academics/Coursera/Data Science Specialization/Reproducible Research/Course Project 1")
+setwd("C:\Users\Aryaman\OneDrive\Documents\GIT\R programing")
 activity<-read.csv("activity.csv")
 Exploring the basics of this data
 
@@ -17,12 +26,15 @@ dim(activity)
 names(activity)
 head(activity)
 str(activity)
-#total number of missing data
+
+#number of missing data
 sum(is.na(activity$steps))/dim(activity)[[1]]
-#transforming the date column into date format using lubridate
+
+#date column into date format using lubridate
 library(lubridate)
 activity$date<-ymd(activity$date)
 length(unique(activity$date))
+
 ##Step 2 ##Histogram of the total number of steps taken each day
 
 library(ggplot2)
@@ -31,15 +43,18 @@ Q2$date<-rownames(Q2)
 rownames(Q2)<-NULL
 names(Q2)[[1]]<-"Total Steps"
 png("plot1.png")
+
 #Total Steps by date bar chart
 ggplot(Q2,aes(y=Q2$`Total Steps`,x=Q2$date))+geom_bar(stat="identity") + ylab("Total Steps")+xlab("Date")+ggtitle("Total Steps by date")
 dev.off()
 ggplot(Q2,aes(y=Q2$`Total Steps`,x=Q2$date))+geom_bar(stat="identity") + ylab("Total Steps")+xlab("Date")+ggtitle("Total Steps by date")
+
 #Histogram of total steps
 qplot(Q2$`Total Steps`,geom="histogram",xlab="Total Steps",ylab="Counts",main="Total Steps Historgram")
 png("plot1.1.png")
 qplot(Q2$`Total Steps`,geom="histogram",xlab="Total Steps",ylab="Counts",main="Total Steps Historgram")
 dev.off()
+
 ##Step 3 ##Mean and median number of steps taken each day
 
 library(dplyr)
@@ -51,6 +66,7 @@ temp<-activity%>%select(date,steps) %>% group_by(date) %>% summarise(median(step
 names(temp)[[2]]<-"Median Steps"
 Q3$median<-temp$`Median Steps`
 Q3<-Q3 %>% select(date,`Mean Steps`,median)
+
 ##Step 4 ##Time series plot of the average number of steps taken
 
 Q4<-Q3
@@ -59,12 +75,14 @@ ggplot(Q4,aes(x=Q4$date,y=Q4$`Mean Steps`))+geom_bar(stat="identity")+scale_x_da
 png("plot4.png")
 ggplot(Q4,aes(x=Q4$date,y=Q4$`Mean Steps`))+geom_bar(stat="identity")+scale_x_date()+ylab("Mean Steps Every day")+xlab("Date")+ggtitle("Mean Steps by Date")
 dev.off()
+
 ##Step 5 ##The 5-minute interval that, on average, contains the maximum number of steps
 
-#This is assuming that the words on average means averaging steps by date and interval
+#assuming the words on average means averaging steps by date and interval
 activity$interval<-factor(activity$interval)
 Q5<-aggregate(data=activity,steps~date+interval,FUN="mean")
 Q5<-aggregate(data=Q5,steps~interval,FUN="max")
+
 ##Step 6 Code to describe and show a strategy for imputing missing data There are multiple strategies to deal with multiple value imputations. The common strategies include:
 
 Constant value imputations
@@ -113,7 +131,7 @@ else {Q6.6[i,6]=Q6.6[i,3]}
 Q6.6 <-Q6.6  %>% select(date,weekday,interval,Steps.Updated)
 names(Q6.6)[[4]]<-"Steps"
 
-Step 7
+##Step 7
 Histogram of the total number of steps taken each day after missing values are imputed
 
 png("plot7.png")
@@ -121,7 +139,7 @@ qplot(Q6.6$Steps,geom="histogram",main="Total steps taken histogram post imputat
 dev.off()
 qplot(Q6.6$Steps,geom="histogram",main="Total steps taken histogram post imputation",xlab="Steps",ylab="Count")
 
-Step 8
+##Step 8
 Panel plot comparing the average number of steps taken per 5-minute interval across weekdays and weekends
 
 Q8<-Q6.6
