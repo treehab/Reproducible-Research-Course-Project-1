@@ -20,6 +20,7 @@ html_document
 
 setwd("C:\Users\Aryaman\OneDrive\Documents\GIT\R programing")
 activity<-read.csv("activity.csv")
+
 Exploring the basics of this data
 
 dim(activity)
